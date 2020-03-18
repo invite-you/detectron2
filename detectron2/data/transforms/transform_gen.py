@@ -18,7 +18,7 @@ from fvcore.transforms.transform import (
 )
 from PIL import Image
 
-from .transform import ExtentTransform, ResizeTransform
+from .transform import ExtentTransform, ResizeTransform, RotationTransform
 
 __all__ = [
     "RandomBrightness",
@@ -30,6 +30,7 @@ __all__ = [
     "RandomLighting",
     "Resize",
     "ResizeShortestEdge",
+    "RandomRotation",
     "TransformGen",
     "apply_transform_gens",
 ]
@@ -111,7 +112,27 @@ class TransformGen(metaclass=ABCMeta):
 
     __str__ = __repr__
 
+class RandomRotation(TransformGen):
+    """
+    Randomly crop a subimage out of an image.
+    """
 
+    def __init__(self):
+        """
+        Args:
+            crop_type (str): one of "relative_range", "relative", "absolute".
+                See `config/defaults.py` for explanation.
+            crop_size (tuple[float]): the relative ratio or absolute pixels of
+                height and width
+        """
+        super().__init__()
+        self._init(locals())
+
+    def get_transform(self, img):
+        h, w = img.shape[:2]
+        theta = np.random.randint(0, 360)
+        return RotationTransform(w, h, theta, 0)
+    
 class RandomFlip(TransformGen):
     """
     Flip the image horizontally or vertically with the given probability.
