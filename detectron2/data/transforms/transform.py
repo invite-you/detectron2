@@ -15,7 +15,7 @@ class RotationTransform(Transform):
         super().__init__()
         self._set_attributes(locals())
 
-    def __rotate_image(image, angle):
+    def __rotate_image(self, image, angle):
         (h, w) = image.shape[:2]
         (cX, cY) = (w // 2, h // 2)
 
@@ -27,7 +27,7 @@ class RotationTransform(Transform):
         nH = int((h * cos) + (w * sin))
         return cv2.warpAffine(image, M, (h, w))
 
-    def __rotate_box(coords, cx, cy, theta):
+    def __rotate_box(self, coords, cx, cy, theta):
         new_bb = list(coords)
         for i,coord in enumerate(coords):
             M = cv2.getRotationMatrix2D((cx, cy), theta, 1.0)
@@ -38,10 +38,10 @@ class RotationTransform(Transform):
 
     def apply_image(self, img):
         assert img.shape[:2] == (self.h, self.w)
-        return __rotate_image(img, self.theta)
+        return self.__rotate_image(img, self.theta)
 
     def apply_coords(self, coords):
-        return __rotate_box(coords, self.h/2, self.w/2, self.theta)
+        return self.__rotate_box(coords, self.h/2, self.w/2, self.theta)
 
     def apply_segmentation(self, segmentation):
         return self.apply_image(segmentation)
