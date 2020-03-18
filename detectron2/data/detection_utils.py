@@ -463,6 +463,9 @@ def build_transform_gen(cfg, is_train):
         tfm_gens.append(T.RandomFlip())
         tfm_gens.append(T.RandomBrightness(0.7, 1.3))
         tfm_gens.append(T.RandomLighting(0.06))        
-        tfm_gens.append(T.RandomContrast(0.8, 1.2))
+        tfm_gens.append(T.RandomContrast(0.7, 1.3))
+        tfm_gens.append(T.RandomBrightness(0.7, 1.3))
+        tfm_gens.append(T.RandomRotation())
+        tfm_gens.append(T.RandomRotation(0.7, 1.3))
         logger.info("TransformGens used in training: " + str(tfm_gens))
     return tfm_gens
