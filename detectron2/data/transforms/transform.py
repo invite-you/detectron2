@@ -34,7 +34,9 @@ class RotationTransform(Transform):
             v = [coord[0],coord[1],1]
             calculated = np.dot(M,v)
             new_bb[i] = (calculated[0],calculated[1])
-        return new_bb
+        min_x, min_y = np.min(new_bb, axis=0)
+        max_x, max_y = np.max(new_bb, axis=0)    
+        return np.array([min_x, min_y, max_x, max_y])
 
     def apply_image(self, img):
         assert img.shape[:2] == (self.h, self.w)
