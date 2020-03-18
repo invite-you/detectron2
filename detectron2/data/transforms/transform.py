@@ -29,6 +29,7 @@ class RotationTransform(Transform):
 
     def __rotate_box(self, coords, cx, cy, theta):
         new_bb = list(coords)
+        print(coords)
         for i,coord in enumerate(coords):
             M = cv2.getRotationMatrix2D((cx, cy), theta, 1.0)
             v = [coord[0],coord[1],1]
