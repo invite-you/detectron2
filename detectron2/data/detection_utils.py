@@ -466,6 +466,6 @@ def build_transform_gen(cfg, is_train):
         tfm_gens.append(T.RandomContrast(0.7, 1.3))
         tfm_gens.append(T.RandomBrightness(0.7, 1.3))
         tfm_gens.append(T.RandomRotation())
-        tfm_gens.append(T.RandomRotation(0.7, 1.3))
+        tfm_gens.append(T.RandomSaturation(0.7, 1.3))
         logger.info("TransformGens used in training: " + str(tfm_gens))
     return tfm_gens
