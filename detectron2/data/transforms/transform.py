@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved
 # File: transform.py
-
+import cv2
 import numpy as np
 from fvcore.transforms.transform import HFlipTransform, NoOpTransform, Transform
 from PIL import Image
