@@ -25,7 +25,7 @@ class RotationTransform(Transform):
 
         nW = int((h * sin) + (w * cos))
         nH = int((h * cos) + (w * sin))
-        return cv2.warpAffine(image, M, (nW, nH))
+        return cv2.warpAffine(image, M, (h, w))
 
     def __rotate_box(coords, cx, cy, theta):
         new_bb = list(coords)
