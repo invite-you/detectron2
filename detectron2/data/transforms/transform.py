@@ -6,7 +6,45 @@ import numpy as np
 from fvcore.transforms.transform import HFlipTransform, NoOpTransform, Transform
 from PIL import Image
 
-__all__ = ["ExtentTransform", "ResizeTransform"]
+__all__ = ["ExtentTransform", "ResizeTransform", "RotationTransform"]
+
+
+class RotationTransform(Transform):    
+    def __init__(self, w, h, theta, persentation):
+        # TODO decide on PIL vs opencv
+        super().__init__()
+        self._set_attributes(locals())
+
+    def __rotate_image(image, angle):
+        (h, w) = image.shape[:2]
+        (cX, cY) = (w // 2, h // 2)
+
+        M = cv2.getRotationMatrix2D((cX, cY), angle, 1.0)
+        cos = np.abs(M[0, 0])
+        sin = np.abs(M[0, 1])
+
+        nW = int((h * sin) + (w * cos))
+        nH = int((h * cos) + (w * sin))
+        return cv2.warpAffine(image, M, (nW, nH))
+
+    def __rotate_box(coords, cx, cy, theta):
+        new_bb = list(coords)
+        for i,coord in enumerate(coords):
+            M = cv2.getRotationMatrix2D((cx, cy), theta, 1.0)
+            v = [coord[0],coord[1],1]
+            calculated = np.dot(M,v)
+            new_bb[i] = (calculated[0],calculated[1])
+        return new_bb
+
+    def apply_image(self, img):
+        assert img.shape[:2] == (self.h, self.w)
+        return __rotate_image(img, self.theta)
+
+    def apply_coords(self, coords):
+        return __rotate_box(coords, self.h/2, self.w/2, self.theta)
+
+    def apply_segmentation(self, segmentation):
+        return self.apply_image(segmentation)
 
 
 class ExtentTransform(Transform):
